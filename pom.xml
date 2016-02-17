@@ -33,9 +33,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.warrenstrange</groupId>
-    <artifactId>googleauth</artifactId>
-    <version>0.5.0</version>
+    <groupId>mx.openpay</groupId>
+    <artifactId>openpay-googleauth</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -59,22 +59,33 @@
             <organization>Enrico M. Crisostomo</organization>
             <organizationUrl>http://thegreyblog.blogspot.com</organizationUrl>
         </developer>
+        <developer>
+            <name>Openpay Developers</name>
+        </developer>
     </developers>
 
     <scm>
-        <connection>scm:git:git@github.com:wstrange/GoogleAuth.git</connection>
-        <developerConnection>scm:git:git@github.com:wstrange/GoogleAuth.git
+        <connection>scm:git:git://github.com/open-pay/GoogleAuth.git</connection>
+        <developerConnection>scm:git:git@github.com:open-pay/GoogleAuth.git
         </developerConnection>
-        <url>git@github.com:wstrange/GoogleAuth.git</url>
+        <url>http://github.com/open-pay/GoogleAuth/tree/master</url>
     </scm>
 
     <distributionManagement>
+           <!-- Publish the versioned releases here -->
+        <repository>
+            <id>nexus-facelend</id>
+            <name>RepositoryProxy</name>
+            <url>http://nexus.facelend.com:8081/nexus/content/repositories/releases</url>
+        </repository>
+           <!-- Publish the versioned releases here -->
         <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <id>nexus-facelend</id>
+            <name>RepositoryProxy</name>
+            <url>http://nexus.facelend.com:8081/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
-
+    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -117,99 +128,4 @@
         </plugins>
     </build>
 
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-enforcer-plugin</artifactId>
-                        <version>1.4</version>
-                        <executions>
-                            <execution>
-                                <id>enforce-no-snapshots</id>
-                                <goals>
-                                    <goal>enforce</goal>
-                                </goals>
-                                <configuration>
-                                    <rules>
-                                        <requireReleaseDeps>
-                                            <message>No Snapshots dependencies are allowed in a release build.</message>
-                                            <onlyWhenRelease>true</onlyWhenRelease>
-                                        </requireReleaseDeps>
-                                    </rules>
-                                    <fail>true</fail>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.5</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>2.4</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <!--
-                          This plugin chokes on self-closing tags, which are
-                          recreated automatically every time IDEA reformats the code.
-                        -->
-                        <configuration>
-                            <additionalparam>-Xdoclint:none</additionalparam>
-                        </configuration>
-                        <version>2.10.1</version>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <!--
-                      The Maven GPG plugin relies on information found on
-                      settings.xml.
-                      See http://central.sonatype.org/pages/apache-maven.html for
-                      further information.
-                    -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 </project>
